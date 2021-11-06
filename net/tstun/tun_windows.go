@@ -7,11 +7,16 @@ package tstun
 import (
 	"golang.org/x/sys/windows"
 	"golang.zx2c4.com/wireguard/tun"
+	"golang.zx2c4.com/wireguard/tun/wintun"
 	"golang.zx2c4.com/wireguard/windows/tunnel/winipcfg"
 )
 
 func init() {
-	tun.WintunTunnelType = "Tailscale"
+	var err error
+	tun.WintunPool, err = wintun.MakePool("Tailscale")
+	if err != nil {
+		panic(err)
+	}
 	guid, err := windows.GUIDFromString("{37217669-42da-4657-a55b-0d995d328250}")
 	if err != nil {
 		panic(err)
